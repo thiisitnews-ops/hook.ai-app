@@ -1,34 +1,68 @@
-// src/pages/SignUpPage.tsx
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function SignUpPage() {
-  const { signUpWithEmail, signInWithProvider } = useAuth();
+  const { signUpEmail, signInGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSignUp = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: any) => {
     e.preventDefault();
-    const res = await signUpWithEmail(email, password);
+
+    const res = await signUpEmail(email, password);
+
     if (res.error) {
       alert(res.error.message);
     } else {
-      alert("Check your email for confirmation (if enabled)");
+      alert("Check your email inbox to confirm your account.");
     }
   };
 
   return (
-    <div>
-      <h2>Create account</h2>
-      <form onSubmit={onSignUp}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
-        <button type="submit">Sign up</button>
+    <div className="signup-wrapper">
+      <h2>Create Account</h2>
+
+      <button
+        onClick={signInGoogle}
+        style={{
+          width: "100%",
+          padding: "10px",
+          background: "white",
+          border: "1px solid #ccc",
+          cursor: "pointer",
+          marginBottom: "15px"
+        }}
+      >
+        Sign Up with Google
+      </button>
+
+      <hr />
+
+      <form onSubmit={handleSignUp}>
+        <label>Email</label>
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <label>Password</label>
+        <input
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onPaste={(e) => e.preventDefault()}  // 🚫 Disable paste
+        />
+
+        <button type="submit" style={{ width: "100%" }}>
+          Create Account
+        </button>
       </form>
 
-      <div>
-        <button onClick={() => signInWithProvider("google")}>Continue with Google</button>
-        <button onClick={() => signInWithProvider("facebook")}>Continue with Facebook</button>
+      <div style={{ marginTop: "15px" }}>
+        Already have an account? <a href="/login">Sign in</a>
       </div>
     </div>
   );

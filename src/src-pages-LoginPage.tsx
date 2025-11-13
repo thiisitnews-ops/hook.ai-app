@@ -1,44 +1,74 @@
-// src/pages/LoginPage.tsx
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
-  const { signInWithEmail, signInWithProvider } = useAuth();
+  const { signInEmail, signInGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const onEmailSignIn = async (e: React.FormEvent) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const res = await signInWithEmail(email, password);
+
+    const res = await signInEmail(email, password);
     setLoading(false);
+
     if (res.error) {
       alert(res.error.message);
     } else {
-      // success (supabase handles session)
+      window.location.href = "/";
     }
   };
 
   return (
-    <div className="auth-card">
-      <h2>Welcome back</h2>
+    <div className="login-wrapper">
 
-      <form onSubmit={onEmailSignIn}>
+      <h2>Welcome Back</h2>
+
+      {/* Google Login */}
+      <button
+        onClick={signInGoogle}
+        style={{
+          width: "100%",
+          padding: "10px",
+          background: "white",
+          border: "1px solid #ccc",
+          cursor: "pointer",
+          marginBottom: "15px"
+        }}
+      >
+        Continue with Google
+      </button>
+
+      <hr />
+
+      {/* Email Login */}
+      <form onSubmit={handleLogin} style={{ marginTop: "15px" }}>
         <label>Email</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
         <label>Password</label>
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
-        <button type="submit" disabled={loading}>
-          Sign in
+        <input
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onPaste={(e) => e.preventDefault()}  // 🚫 Disable paste
+        />
+
+        <button type="submit" disabled={loading} style={{ width: "100%" }}>
+          {loading ? "Loading..." : "Sign in"}
         </button>
       </form>
 
-      <div style={{ marginTop: 12 }}>
-        <button onClick={() => signInWithProvider("google")}>Sign in with Google</button>
-        <button onClick={() => signInWithProvider("facebook")}>Sign in with Facebook</button>
-        <button onClick={() => signInWithProvider("github")}>Sign in with GitHub</button>
-        <button onClick={() => signInWithProvider("twitter")}>Sign in with X</button>
+      <div style={{ marginTop: "15px" }}>
+        Don't have an account? <a href="/signup">Sign up</a>
       </div>
     </div>
   );
