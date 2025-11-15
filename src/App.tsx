@@ -1,52 +1,51 @@
 import React, { useState } from "react";
-import { useAuth } from "./hooks/useAuth";
-import { AuthForm } from "./components/AuthForm";
-import { Header } from "./components/Header";
+import Header from "./components/Header";
 import { PricingSection } from "./components/PricingSection";
-import { Success } from "./pages/Success";
+import { AuthForm } from "./components/AuthForm";
+import { useAuth } from "./hooks/useAuth";
 
 export default function App() {
-  try {
-    const { user, loading } = useAuth();
-    const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
-    const isSuccessPage = window.location.pathname === "/success";
+  const { user, loading, signOut } = useAuth();
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [activePage, setActivePage] = useState<"generate" | "upload" | "pricing">("pricing");
 
-    if (loading) {
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      );
-    }
-
-    if (isSuccessPage) return <Success />;
-
-    if (!user)
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-          <AuthForm
-            mode={authMode}
-            onToggleMode={() =>
-              setAuthMode(authMode === "signin" ? "signup" : "signin")
-            }
-          />
-        </div>
-      );
-
+  // Loading indicator
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white">
-        <Header />
-        <main>
-          <PricingSection />
-        </main>
-      </div>
-    );
-  } catch (error) {
-    console.error("App render error:", error);
-    return (
-      <div className="min-h-screen bg-red-900 text-white flex items-center justify-center">
-        <p>Render failed. Check console for details.</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
       </div>
     );
   }
+
+  // If user NOT logged in → show Auth card
+  if (!user) {
+    return (
+      <div className="auth-wrapper">
+        <AuthForm
+          mode={authMode}
+          onToggleMode={() =>
+            setAuthMode(authMode === "signin" ? "signup" : "signin")
+          }
+        />
+      </div>
+    );
+  }
+
+  // If logged in → show full UI
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Header
+        activePage={activePage}
+        setActivePage={setActivePage}
+        onSignInClick={signOut}
+        isLoggedIn={true}
+      />
+
+      {/* SHOW YOUR PRICING UI FOR NOW */}
+      <main>
+        <PricingSection />
+      </main>
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-// utils/stripeProducts.ts
 export type Plan = {
   id: string;
   name: string;
@@ -11,46 +10,36 @@ export type Plan = {
 };
 
 const stripeProducts: Record<string, Plan> = {
-  free_trial: {
-    id: "free_trial",
-    name: "Free Trial",
-    priceId: "",
-    amountMonthly: 0,
-    currency: "usd",
-    description: "Try without credit card",
-    thumbnails: 5,
-    ctaLabel: "Start Free Trial"
-  },
   basic: {
     id: "basic",
     name: "Basic",
-    priceId: "price_1SNQ9NIu8atC8qcjJ8gp9",
+    priceId: "price_1SNQ9NIu8atC8qcjJ8gp98A3",
     amountMonthly: 15,
     currency: "usd",
-    description: "Small YouTubers, hobbyists — 30 thumbnails / month",
+    description: "For small creators — 30 thumbnails / month",
     thumbnails: 30,
     ctaLabel: "Choose Plan"
   },
   pro: {
     id: "pro",
     name: "Pro",
-    priceId: "price_1SNQ8eIu8atC8qcjaddSK",
+    priceId: "price_1SNQ8eIu8atC8qcjaddSKFNG",
     amountMonthly: 25,
     currency: "usd",
-    description: "Frequent creators — 100 thumbnails / month",
+    description: "For consistent creators — 100 thumbnails / month",
     thumbnails: 100,
     ctaLabel: "Choose Plan"
   },
   agency: {
     id: "agency",
     name: "Agency",
-    priceId: "price_1SNQ9lIu8atC8qcjoQFf5",
+    priceId: "price_1SNQ9lIu8atC8qcjoQFf5WtA",
     amountMonthly: 59,
     currency: "usd",
-    description: "Agencies — 300 thumbnails / month",
+    description: "For agencies — 300 thumbnails / month",
     thumbnails: 300,
     ctaLabel: "Choose Plan"
-  }
+  },
 };
 
 export default stripeProducts;

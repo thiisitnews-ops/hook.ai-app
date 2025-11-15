@@ -1,48 +1,56 @@
-import React from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { useSubscription } from '../hooks/useSubscription';
-import { LogOut, Crown } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const { user, signOut } = useAuth();
-  const { plan } = useSubscription();
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-gray-900">SubscriptionApp</h1>
-          </div>
-          
+    <header className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <img
+          src="/logo.png"
+          alt="Logo"
+          className="h-10 w-10 object-contain"
+        />
+        <span className="text-xl font-bold tracking-tight">HOOK.AI</span>
+
+        {/* NAVIGATION */}
+        <nav className="hidden md:flex items-center gap-5 ml-10">
+          <Link to="/generate" className="hover:text-cyan-400">Generate</Link>
+          <Link to="/upload" className="hover:text-cyan-400">Upload</Link>
+          <Link to="/pricing" className="hover:text-cyan-400">Pricing</Link>
           {user && (
-            <div className="flex items-center space-x-4">
-              {plan && (
-                <div className="flex items-center bg-indigo-50 px-3 py-1 rounded-full">
-                  <Crown className="w-4 h-4 text-indigo-600 mr-1" />
-                  <span className="text-sm font-medium text-indigo-700">
-                    {plan.name} Plan
-                  </span>
-                </div>
-              )}
-              
-              <div className="flex items-center space-x-3">
-                <span className="text-sm text-gray-700">{user.email}</span>
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+            <Link to="/dashboard" className="hover:text-cyan-400">Dashboard</Link>
           )}
-        </div>
+        </nav>
+      </div>
+
+      {/* RIGHT SIDE */}
+      <div className="flex items-center gap-5">
+        {user ? (
+          <>
+            <span className="text-sm text-gray-300">
+              {user.email}
+            </span>
+            <button
+              onClick={signOut}
+              className="bg-red-600 px-4 py-2 rounded hover:bg-red-700"
+            >
+              Sign Out
+            </button>
+          </>
+        ) : (
+          <Link
+            to="/signin"
+            className="bg-cyan-600 px-4 py-2 rounded hover:bg-cyan-700"
+          >
+            Sign In
+          </Link>
+        )}
       </div>
     </header>
   );
 };
+
+export default Header;

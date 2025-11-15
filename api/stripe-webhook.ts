@@ -3,7 +3,9 @@ import Stripe from "stripe";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, { apiVersion: "2022-11-15" });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-10-29.clover",
+});
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 const supabaseAdmin = createClient(
@@ -44,9 +46,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       let subscription: Stripe.Subscription | null = null;
       if (subscriptionId) {
         subscription = await stripe.subscriptions.retrieve(subscriptionId);
-      } else {
-        // we can try to fetch latest subscription for customer
       }
+
+      // Get period dates - FIXED: Use correct property access
+      const currentPeriodStart = subscription?.current_period_start ?? null;
+      const currentPeriodEnd = subscription?.current_period_end ?? null;
 
       // Upsert to Supabase (store mapping user -> subscription)
       if (userId) {
@@ -56,8 +60,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           stripe_customer_id: session.customer as string | null,
           status: subscription?.status ?? "active",
           price_id: subscription?.items?.data?.[0]?.price?.id ?? session.metadata?.priceId ?? null,
-          current_period_start: subscription?.current_period_start ? new Date(subscription.current_period_start * 1000).toISOString() : null,
-          current_period_end: subscription?.current_period_end ? new Date(subscription.current_period_end * 1000).toISOString() : null
+          current_period_start: currentPeriodStart ? new Date(currentPeriodStart * 1000).toISOString() : null,
+          current_period_end: currentPeriodEnd ? new Date(currentPeriodEnd * 1000).toISOString() : null,
         };
 
         const { error } = await supabaseAdmin.from("subscriptions").upsert(payload, { onConflict: "stripe_subscription_id" });
