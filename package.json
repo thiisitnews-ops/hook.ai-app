@@ -1,7 +1,9 @@
 {
   "name": "hook-ai-app",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "npm cache clean --force",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -11,7 +13,7 @@
     "@supabase/supabase-js": "^2.81.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^6.8.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.7.0",
