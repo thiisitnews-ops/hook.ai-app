@@ -3,7 +3,7 @@ import React from "react";
 import stripeProducts from "../utils/stripeProducts";
 
 async function createCheckout(priceId: string) {
-  const res = await fetch("/api/create-checkout-session", {
+  const res = await fetch("/api/checkout"
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ priceId })
@@ -13,7 +13,7 @@ async function createCheckout(priceId: string) {
     // redirect the browser
     window.location.href = data.url;
   } else {
-    alert("Failed to create checkout session");
+    alert("Failed to create api /checkout");
     console.error("createCheckout error", data);
   }
 }
