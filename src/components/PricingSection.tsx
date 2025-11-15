@@ -78,17 +78,24 @@ export const PricingSection: React.FC = () => {
 
     setLoading(true);
 
-    try {
-      const res = await fetch("/api/checkout", { ... })
-, {
+   try {
+    const res = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({ priceId }),
-      });
+    });
 
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else alert("Checkout failed.");
+    const data = await res.json();
+    if (data.url) {
+        window.location.href = data.url;
+    }
+} catch (error) {
+    console.error("Checkout error", error);
+    alert("Checkout failed.");
+}
+
     } catch (err) {
       console.error("Stripe error:", err);
       alert("Error connecting to Stripe.");
