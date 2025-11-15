@@ -72,7 +72,7 @@ export const PricingSection: React.FC = () => {
 
     try {
       // CORRECTED ENDPOINT
-      const res = await fetch("/api/create-checkout-session", {
+      const res = await ("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ priceId }),
@@ -80,7 +80,7 @@ export const PricingSection: React.FC = () => {
 
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.href = dfetchata.url;
       } else {
         alert("Checkout failed.");
       }

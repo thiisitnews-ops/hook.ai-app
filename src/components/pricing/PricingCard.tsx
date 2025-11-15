@@ -83,7 +83,8 @@ export function PricingCard({ product, isPopular = false }: PricingCardProps) {
         >
           const handleCheckout = async () => {
   try {
-    const response = await fetch("/api/create-checkout-session", {
+    const response = await fetch("/api/checkout", { ... })
+, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

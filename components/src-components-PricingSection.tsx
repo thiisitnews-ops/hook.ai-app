@@ -72,9 +72,10 @@ export const PricingSection: React.FC = () => {
 
     try {
       // CORRECTED ENDPOINT
-      const res = await fetch("/api/create-checkout-session", {
+      const res = await fetch("/api/checkout", { ... })
+
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
         body: JSON.stringify({ priceId }),
       });
 
