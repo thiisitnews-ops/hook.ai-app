@@ -58,7 +58,12 @@ export const PricingSection: React.FC = () => {
       priceId: "price_1SNQ9lIu8atC8qcjoQFf5WtA",
       thumbnails: "Unlimited thumbnails",
       bestFor: "Agencies / teams",
-      features: ["Unlimited generations", "No watermark", "Team access", "API access"],
+      features: [
+        "Unlimited generations",
+        "No watermark",
+        "Team access",
+        "API access",
+      ],
     },
   ];
 
@@ -71,15 +76,14 @@ export const PricingSection: React.FC = () => {
     setLoading(priceId);
 
     try {
-      // CORRECTED ENDPOINT
-      const res = await fetch("/api/checkout", { ... })
-
+      const res = await fetch("/api/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ priceId }),
       });
 
       const data = await res.json();
+
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -122,11 +126,11 @@ export const PricingSection: React.FC = () => {
             <button
               onClick={() => handleCheckout(plan.priceId)}
               disabled={loading === plan.priceId}
-              className={`mt-6 w-full py-3 rounded-lg font-semibold transition 
-                ${plan.priceId === "free"
+              className={`mt-6 w-full py-3 rounded-lg font-semibold transition ${
+                plan.priceId === "free"
                   ? "bg-gray-600 hover:bg-gray-500"
                   : "bg-cyan-600 hover:bg-cyan-700"
-                } disabled:opacity-50`}
+              } disabled:opacity-50`}
             >
               {loading === plan.priceId ? "Processing..." : "Choose Plan"}
             </button>
